@@ -1,0 +1,259 @@
+<!-- ==================== MODIFIED index.html (only header section changed) ==================== -->
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Terminal de rendimiento personal. Seguimiento de pasos, métricas climáticas y análisis de datos en tiempo real.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src https: data:; connect-src 'self' http://localhost:3000 https://tu-backend-desplegado.com https://cdn.jsdelivr.net;">
+  <title>NEAT MDQ — Terminal de Rendimiento</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+  <header class="bento-header">
+    <div class="bento-title">
+      <h1>
+        <span class="logo-ne">NE</span><span class="logo-a">A</span><span class="logo-t">T</span><span class="logo-m">M</span><span class="logo-dq">DQ</span>
+      </h1>
+      <p>TERMINAL DE RENDIMIENTO — MAR DEL PLATA 2026</p>
+    </div>
+    <nav class="header-controls" aria-label="Controles principales">
+      <button id="theme-toggle" class="bento-btn" type="button" aria-label="Alternar tema claro/oscuro">
+        <i class="fas fa-adjust" aria-hidden="true"></i> TEMA
+      </button>
+      <button id="open-settings" class="bento-btn" type="button" data-action="settings" aria-label="Abrir configuración de parámetros">
+        <i class="fas fa-sliders-h" aria-hidden="true"></i> PARÁMETROS
+      </button>
+    </nav>
+  </header>
+
+  <main class="bento-container">
+    
+    <section class="bento-box col-span-6">
+      <span class="bento-label">Racha de Consistencia</span>
+      <div id="streak-display" class="bento-data">0 DÍAS</div>
+    </section>
+    <section class="bento-box col-span-6">
+      <span class="bento-label">Cuenta Regresiva</span>
+      <div id="countdown-display" class="bento-data">-- DÍAS</div>
+      <span class="bento-label" style="margin-top:0.5rem; opacity:0.7;">RESTANTES</span>
+    </section>
+
+    <section class="bento-box col-span-4">
+      <h2 class="bento-label">Inyectar Métrica Diaria</h2>
+      <form id="steps-form" autocomplete="off" novalidate>
+        <div class="form-group" style="margin-bottom: 0.75rem;">
+          <label for="steps-date" class="bento-label">Fecha</label>
+          <input type="date" id="steps-date" class="form-input" required>
+        </div>
+        <div class="form-group" style="margin-bottom: 0.75rem;">
+          <label for="steps-input" class="bento-label">Magnitud (Pasos)</label>
+          <input type="number" id="steps-input" class="form-input" placeholder="Ej: 5000" min="1" max="100000" required>
+        </div>
+        <button type="submit" class="bento-btn" style="width:100%;">
+          <i class="fas fa-database" aria-hidden="true"></i> CONFIRMAR INYECCIÓN
+        </button>
+      </form>
+    </section>
+
+    <section class="bento-box col-span-4">
+      <h2 class="bento-label">Telemetría Climática</h2>
+      <div class="weather-control" style="display:flex; gap:0.5rem; margin-bottom:0.75rem;">
+        <input type="text" id="city-input" class="form-input" placeholder="Ciudad..." aria-label="Buscar clima por ciudad" maxlength="50">
+        <button id="search-btn" class="bento-btn" type="button" aria-label="Buscar clima">
+          <i class="fas fa-search" aria-hidden="true"></i>
+        </button>
+      </div>
+      <div id="weather-status" class="bento-label" style="min-height: 1.5em;">Sincronizando con satélite...</div>
+      <div id="weather-display" class="weather-data hidden">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+          <div>
+            <div id="temp" class="bento-data" style="font-size:2.5rem;">--°C</div>
+            <div id="city-name" class="bento-label" style="margin-bottom:0;">--</div>
+          </div>
+          <img id="weather-icon" src="" alt="Estado meteorológico" style="width:64px; height:64px; filter: drop-shadow(0 0 4px rgba(99,102,241,0.3));">
+        </div>
+        <div id="description" class="bento-label" style="margin-top:0.5rem; text-transform:capitalize;">--</div>
+      </div>
+    </section>
+
+    <section class="bento-box col-span-4">
+      <h2 class="bento-label">Telemetría Acumulada</h2>
+      <div class="metric-grid" style="display:grid; grid-template-columns: 1fr; gap:0.75rem;">
+        <div>
+          <span class="bento-label">Pasos</span>
+          <span id="current-steps-display" class="bento-data" style="font-size:1.5rem;">0</span>
+        </div>
+        <div>
+          <span class="bento-label">Distancia</span>
+          <span id="current-distance-display" class="bento-data" style="font-size:1.5rem;">0 KM</span>
+        </div>
+        <div>
+          <span class="bento-label">Energía</span>
+          <span id="current-kcal-display" class="bento-data" style="font-size:1.5rem;">0 KCAL</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="bento-box col-span-8">
+      <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:0.5rem;">
+        <h2 class="bento-label" style="margin-bottom:0;">Progreso de Meta Global</h2>
+        <span id="global-percent-display" class="bento-data" style="font-size:1.8rem; font-weight:700;">0%</span>
+      </div>
+      <div class="progress-rail" style="height:6px; margin-bottom:1rem;">
+        <div id="global-progress-track" class="progress-track"></div>
+      </div>
+      <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:1rem; font-family: 'JetBrains Mono', monospace; font-size:0.8rem;">
+        <div>
+          <span class="bento-label">Completado</span>
+          <span id="global-steps-done">0</span>
+        </div>
+        <div>
+          <span class="bento-label">Objetivo</span>
+          <span id="global-steps-goal">0</span>
+        </div>
+        <div>
+          <span class="bento-label">Restante / Promedio Diario</span>
+          <div style="display:flex; flex-direction:column; gap:0.25rem;">
+            <span id="global-steps-remaining">0</span>
+            <span id="global-daily-needed" style="color:var(--accent);">0</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bento-box col-span-4">
+      <h2 class="bento-label">Estadísticas Tácticas</h2>
+      <div style="display:flex; flex-direction:column; gap:0.75rem;">
+        <div style="display:flex; justify-content:space-between; border-bottom:1px solid var(--border); padding-bottom:0.5rem;">
+          <span class="bento-label" style="margin-bottom:0;">Promedio diario</span>
+          <span id="stats-avg" class="bento-data" style="font-size:1.1rem;">0</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; border-bottom:1px solid var(--border); padding-bottom:0.5rem;">
+          <span class="bento-label" style="margin-bottom:0;">Mejor día</span>
+          <span id="stats-best" class="bento-data" style="font-size:1.1rem;">0</span>
+        </div>
+        <div style="display:flex; justify-content:space-between;">
+          <span class="bento-label" style="margin-bottom:0;">Racha actual</span>
+          <span id="stats-streak" class="bento-data" style="font-size:1.1rem;">0</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="bento-box col-span-12">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+        <h2 class="bento-label" style="margin-bottom:0;">Serie Temporal Analítica</h2>
+        <nav class="range-controls" role="tablist" aria-label="Rango de tiempo del gráfico">
+          <button class="bento-btn range-btn" data-range="7" role="tab" aria-selected="true">7D</button>
+          <button class="bento-btn range-btn" data-range="30" role="tab">30D</button>
+          <button class="bento-btn range-btn" data-range="all" role="tab">ALL</button>
+        </nav>
+      </div>
+      <div style="position:relative; height:300px; width:100%;">
+        <canvas id="steps-chart" aria-label="Gráfico lineal de pasos diarios" role="img"></canvas>
+      </div>
+    </section>
+
+    <section class="bento-box col-span-8">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+        <h2 class="bento-label" style="margin-bottom:0;">Registro Histórico</h2>
+        <button id="export-data-btn" class="bento-btn" type="button">
+          <i class="fas fa-file-export" aria-hidden="true"></i> Descargar .md
+        </button>
+      </div>
+      <div class="log-table-wrapper">
+        <table class="log-table">
+          <thead>
+            <tr>
+              <th scope="col">Día / Fecha</th>
+              <th scope="col" style="text-align:right;">Magnitud (Pasos)</th>
+              <th scope="col" style="text-align:center;">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="log-table-body">
+            <tr><td colspan="3" style="text-align:center; padding:1rem; color:var(--text-muted); font-size:0.75rem;">Sin registros activos</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="bento-box col-span-4">
+      <h2 class="bento-label" style="margin-bottom:1rem;">Progreso Táctico de Hitos Geográficos</h2>
+      <div id="milestones-container" style="display:flex; flex-direction:column; gap:0.75rem;">
+      </div>
+    </section>
+
+    <footer class="col-span-12" style="text-align:center; padding:1rem 0; opacity:0.6; font-family:'JetBrains Mono',monospace; font-size:0.65rem;">
+      <span id="system-status">Estado local: Sincronizado</span> | NEAT MDQ v1.0
+    </footer>
+  </main>
+
+  <div id="settings-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+    <div class="modal-content">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+        <h2 id="settings-title" class="bento-label" style="font-size:0.85rem; margin-bottom:0;">CONFIGURACIÓN DE PARÁMETROS</h2>
+        <button id="close-settings" class="bento-btn" type="button" aria-label="Cerrar configuración" style="padding:0.25rem 0.5rem;">
+          <i class="fas fa-times" aria-hidden="true"></i>
+        </button>
+      </div>
+      <form id="settings-form">
+        <div class="form-group" style="margin-bottom:1rem;">
+          <label for="config-weight" class="bento-label">Peso Corporal (KG)</label>
+          <input type="number" id="config-weight" class="form-input" value="75" min="30" max="200" step="0.1" required>
+        </div>
+        <div class="form-group" style="margin-bottom:1rem;">
+          <label for="config-goal" class="bento-label">Umbral Mínimo Diario de Pasos</label>
+          <input type="number" id="config-goal" class="form-input" value="3500" min="1000" max="50000" required>
+        </div>
+        <div class="form-group" style="margin-bottom:1.5rem;">
+          <label for="config-date" class="bento-label">Fecha Límite (Reto)</label>
+          <input type="date" id="config-date" class="form-input" required>
+        </div>
+        <div style="display:flex; gap:0.75rem;">
+          <button type="submit" class="bento-btn" style="flex:1;">Guardar Cambios</button>
+          <button type="button" id="cancel-settings" class="bento-btn" style="flex:1;">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="edit-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="edit-title">
+    <div class="modal-content">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+        <h2 id="edit-title" class="bento-label" style="font-size:0.85rem; margin-bottom:0;">EDITAR REGISTRO</h2>
+        <button id="close-edit" class="bento-btn" type="button" aria-label="Cerrar edición" style="padding:0.25rem 0.5rem;">
+          <i class="fas fa-times" aria-hidden="true"></i>
+        </button>
+      </div>
+      <form id="edit-form">
+        <input type="hidden" id="edit-date-original">
+        <div class="form-group" style="margin-bottom:1rem;">
+          <label for="edit-date" class="bento-label">Fecha</label>
+          <input type="date" id="edit-date" class="form-input" required>
+        </div>
+        <div class="form-group" style="margin-bottom:1.5rem;">
+          <label for="edit-steps" class="bento-label">Pasos</label>
+          <input type="number" id="edit-steps" class="form-input" min="1" max="100000" required>
+        </div>
+        <div style="display:flex; gap:0.75rem;">
+          <button type="submit" class="bento-btn" style="flex:1;">Guardar Cambios</button>
+          <button type="button" id="cancel-edit" class="bento-btn" style="flex:1;">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="notification-container"></div>
+
+  <script src="./js/clima.js"></script>
+  <script src="./js/script.js"></script>
+</body>
+</html>

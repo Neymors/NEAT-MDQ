@@ -1,0 +1,549 @@
+/* ==========================================================================
+   NEAT MDQ - CORE DESIGN SYSTEM
+   Style Language: Minimalist Cyberpunk Editorial / Bloomberg Terminal Style
+   ========================================================================== */
+   :root {
+     /* LIGHT MODE TOKENS (EDITORIAL) */
+     --bg: #fdfbf7;
+     --surface: #ffffff;
+     --surface-accent: #f8f5f0;
+     --border: #e2e2e2;
+     --text-main: #1a1a1a;
+     --text-muted: #666666;
+     --accent: #6366f1;
+     --accent-glow: rgba(99, 102, 241, 0.15);
+     --error: #ef4444;
+     --success: #10b981;
+     --warning: #f59e0b;
+     
+     /* SYSTEM METRICS */
+     --radius-sharp: 0px;
+     --radius-sm: 2px;
+     --border-width: 1px;
+     --transition: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+
+     /* GRID LINES: light mode = black */
+     --grid-line: rgba(0, 0, 0, 0.06);
+   }
+   
+   .dark {
+     /* DARK MODE TOKENS (CINEMATIC/TERMINAL) */
+     --bg: #0a0a0c;
+     --surface: #121214;
+     --surface-accent: #1a1a1e;
+     --border: #262626;
+     --text-main: #e2e2e2;
+     --text-muted: #888888;
+     --accent: #818cf8;
+     --accent-glow: rgba(129, 140, 248, 0.25);
+     --error: #f87171;
+     --success: #34d399;
+     --warning: #fbbf24;
+
+     /* GRID LINES: dark mode = white */
+     --grid-line: rgba(255, 255, 255, 0.06);
+   }
+   
+   /* --- BASE RESET & ATMOSPHERIC GRID --- */
+   *, *::before, *::after {
+     margin: 0;
+     padding: 0;
+     box-sizing: border-box;
+   }
+   
+   html {
+     font-size: 16px;
+     -webkit-font-smoothing: antialiased;
+     -moz-osx-font-smoothing: grayscale;
+     scroll-behavior: smooth;
+   }
+   
+   body {
+     background-color: var(--bg);
+     color: var(--text-main);
+     font-family: 'Inter', system-ui, -apple-system, sans-serif;
+     padding: clamp(1rem, 3vw, 2rem);
+     min-height: 100dvh;
+     transition: background-color var(--transition), color var(--transition);
+     line-height: 1.5;
+     background-image: 
+       linear-gradient(var(--grid-line) 1px, transparent 1px),
+       linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+     background-size: 40px 40px;
+     background-position: center center;
+     background-blend-mode: overlay;
+     opacity: 0.98;
+   }
+   
+   /* --- BENTO GRID ARCHITECTURE --- */
+   .bento-container {
+     display: grid;
+     grid-template-columns: repeat(12, 1fr);
+     gap: 1rem;
+     max-width: 1400px;
+     margin: 0 auto;
+   }
+   
+   .bento-header {
+     grid-column: span 12;
+     display: flex;
+     flex-wrap: wrap;
+     justify-content: space-between;
+     align-items: center;
+     gap: 1rem;
+     border-bottom: 2px solid var(--text-main);
+     padding-bottom: 0.75rem;
+     margin-bottom: 0.5rem;
+   }
+   
+   .bento-title h1 {
+     font-size: clamp(1.25rem, 2vw, 1.5rem);
+     font-weight: 800;
+     letter-spacing: -0.03em;
+     text-transform: uppercase;
+   }
+   
+   .bento-title p {
+     font-family: 'SF Mono', 'Fira Code', monospace;
+     font-size: 0.65rem;
+     color: var(--text-muted);
+     letter-spacing: 0.1em;
+     margin-top: 4px;
+   }
+   
+   .bento-box {
+     background-color: var(--surface);
+     border: var(--border-width) solid var(--border);
+     border-radius: var(--radius-sm);
+     padding: 1.25rem;
+     position: relative;
+     transition: border-color var(--transition), background-color var(--transition);
+     display: flex;
+     flex-direction: column;
+   }
+   
+   /* Responsive Grid Spans */
+   .col-span-4  { grid-column: span 4; }
+   .col-span-6  { grid-column: span 6; }
+   .col-span-8  { grid-column: span 8; }
+   .col-span-12 { grid-column: span 12; }
+   
+   @media (max-width: 1024px) {
+     .col-span-8 { grid-column: span 6; }
+   }
+   @media (max-width: 768px) {
+     .col-span-4, .col-span-6, .col-span-8 { grid-column: span 12; }
+   }
+   
+   /* --- TYPOGRAPHY & DATA SYSTEM --- */
+   .bento-label {
+     display: block;
+     font-family: 'SF Mono', 'Fira Code', monospace;
+     font-size: 0.65rem;
+     font-weight: 700;
+     text-transform: uppercase;
+     color: var(--text-muted);
+     letter-spacing: 0.08em;
+     margin-bottom: 0.5rem;
+   }
+   
+   .bento-data {
+     font-size: clamp(1.5rem, 3vw, 2.25rem);
+     font-weight: 800;
+     letter-spacing: -0.02em;
+     line-height: 1;
+   }
+   
+   /* --- INTERACTIVE BUTTONS (TACTICAL HUD) --- */
+   .bento-btn {
+     display: inline-flex;
+     align-items: center;
+     justify-content: center;
+     gap: 0.5rem;
+     padding: 0.5rem 1rem;
+     background-color: var(--surface);
+     border: var(--border-width) solid var(--border);
+     border-radius: var(--radius-sm);
+     color: var(--text-main);
+     font-family: 'SF Mono', 'Fira Code', monospace;
+     font-size: 0.7rem;
+     font-weight: 600;
+     letter-spacing: 0.05em;
+     text-transform: uppercase;
+     cursor: pointer;
+     transition: all var(--transition);
+     outline: none;
+   }
+   
+   .bento-btn:hover {
+     border-color: var(--accent);
+     background-color: var(--surface-accent);
+     box-shadow: 0 0 0 2px var(--accent-glow);
+   }
+   
+   .bento-btn:focus-visible {
+     outline: 2px solid var(--accent);
+     outline-offset: 2px;
+   }
+   
+   .bento-btn:active {
+     transform: translateY(1px);
+   }
+   
+   .range-controls {
+     display: flex;
+     gap: 0.5rem;
+   }
+   
+   .range-btn[aria-selected="true"] {
+     background-color: var(--accent);
+     color: #fff;
+     border-color: var(--accent);
+     box-shadow: 0 0 8px var(--accent-glow);
+   }
+   
+   /* --- ICON SYSTEM (TERMINAL ALIGNED & FIXED) --- */
+   :where(.fas, .far, .fal, .fab) {
+     display: inline-flex;
+     align-items: center;
+     justify-content: center;
+     vertical-align: -0.125em;
+     line-height: 1;
+     color: inherit;
+     width: 1em;
+     text-align: center;
+     box-sizing: content-box;
+   }
+   
+   .bento-btn i {
+     font-size: 0.85em;
+     margin-right: 0.35em;
+     opacity: 0.8;
+     transition: opacity var(--transition);
+   }
+   .bento-btn:hover i { opacity: 1; }
+   
+   #milestones-container i {
+     font-size: 0.7rem;
+     color: var(--accent);
+     margin-right: 0.3rem;
+     opacity: 0.9;
+   }
+   
+   .delete-entry-btn i {
+     font-size: 0.75rem;
+     transition: color var(--transition);
+   }
+   
+   .range-btn[aria-selected="true"] i,
+   .bento-btn[aria-selected="true"] i {
+     color: #fff;
+     opacity: 1;
+   }
+   
+   /* --- DATA TABLE LOGS (EXPANSIÓN VERTICAL MÁXIMA) --- */
+   .bento-box:has(.log-table-wrapper) {
+     display: flex;
+     flex-direction: column;
+     min-height: 320px;
+   }
+   
+   .log-table-wrapper {
+     flex: 1 1 auto;
+     height: 100%;
+     max-height: none;
+     min-height: 200px;
+     overflow-y: auto;
+     border: var(--border-width) solid var(--border);
+     background-color: var(--surface-accent);
+     scrollbar-width: thin;
+     scrollbar-color: var(--border) transparent;
+   }
+   
+   .log-table-wrapper::-webkit-scrollbar {
+     width: 6px;
+   }
+   .log-table-wrapper::-webkit-scrollbar-track {
+     background: transparent;
+   }
+   .log-table-wrapper::-webkit-scrollbar-thumb {
+     background-color: var(--border);
+     border-radius: var(--radius-sharp);
+   }
+   
+   .log-table {
+     width: 100%;
+     border-collapse: collapse;
+     font-family: 'SF Mono', 'Fira Code', monospace;
+     font-size: 0.75rem;
+     text-align: left;
+   }
+   
+   .log-table th {
+     background-color: var(--surface);
+     padding: 0.6rem 0.75rem;
+     font-weight: 700;
+     color: var(--text-muted);
+     border-bottom: var(--border-width) solid var(--border);
+     position: sticky;
+     top: 0;
+     z-index: 1;
+   }
+   
+   .log-table td {
+     padding: 0.5rem 0.75rem;
+     border-bottom: var(--border-width) solid var(--border);
+   }
+   
+   .log-table tr:hover td {
+     background-color: var(--surface-accent);
+   }
+   
+   .log-table tr:last-child td {
+     border-bottom: none;
+   }
+   
+   .delete-entry-btn {
+     background: transparent;
+     border: none;
+     color: var(--text-muted);
+     padding: 0.25rem 0.5rem;
+     border-radius: var(--radius-sm);
+     cursor: pointer;
+     transition: all var(--transition);
+   }
+   .delete-entry-btn:hover {
+     color: var(--error);
+     background-color: rgba(239, 68, 68, 0.1);
+   }
+   
+   .action-btn {
+     background: transparent;
+     border: none;
+     padding: 0.25rem 0.5rem;
+     border-radius: var(--radius-sm);
+     cursor: pointer;
+     transition: all var(--transition);
+     font-size: 0.75rem;
+   }
+   
+   .edit-entry-btn {
+     color: var(--success);
+   }
+   .edit-entry-btn:hover {
+     background-color: rgba(16, 185, 129, 0.1);
+     color: var(--success);
+   }
+   
+   .action-btn.delete-entry-btn {
+     color: var(--error);
+   }
+   .action-btn.delete-entry-btn:hover {
+     background-color: rgba(239, 68, 68, 0.1);
+     color: var(--error);
+   }
+   
+   /* --- FORM & CONTROLS --- */
+   .form-group {
+     margin-bottom: 1rem;
+   }
+   
+   .form-input {
+     width: 100%;
+     background-color: var(--surface-accent);
+     border: var(--border-width) solid var(--border);
+     color: var(--text-main);
+     padding: 0.5rem 0.75rem;
+     font-family: 'Inter', sans-serif;
+     font-size: 0.85rem;
+     border-radius: var(--radius-sm);
+     outline: none;
+     transition: border-color var(--transition), box-shadow var(--transition);
+   }
+   
+   .form-input:focus {
+     border-color: var(--accent);
+     box-shadow: 0 0 0 2px var(--accent-glow);
+   }
+   
+   .weather-data {
+     transition: opacity var(--transition);
+   }
+   
+   /* --- PROGRESS TRACKS --- */
+   .progress-rail {
+     width: 100%;
+     height: 4px;
+     background-color: var(--border);
+     border-radius: var(--radius-sharp);
+     overflow: hidden;
+   }
+   
+   .progress-track {
+     height: 100%;
+     background-color: var(--accent);
+     width: 0%;
+     transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+   }
+   
+   /* --- MODAL SYSTEM --- */
+   .modal-overlay {
+     position: fixed;
+     inset: 0;
+     z-index: 9999;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     padding: 1rem;
+     background-color: rgba(0, 0, 0, 0.6);
+     backdrop-filter: blur(8px);
+     -webkit-backdrop-filter: blur(8px);
+     opacity: 1;
+     transition: opacity var(--transition);
+   }
+   
+   .modal-overlay.hidden {
+     display: none !important;
+     opacity: 0;
+     pointer-events: none;
+   }
+   
+   .modal-content {
+     background-color: var(--surface);
+     border: var(--border-width) solid var(--border);
+     width: 100%;
+     max-width: 420px;
+     padding: 1.5rem;
+     border-radius: var(--radius-sm);
+     box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+     transform: translateY(0);
+     transition: transform var(--transition);
+   }
+   
+   /* --- UTILITIES (Para contenido inyectado dinámicamente por JS) --- */
+   .hidden { display: none !important; }
+   .text-red-500 { color: var(--error) !important; }
+   .text-emerald-400 { color: var(--success); }
+   .text-slate-400 { color: var(--text-muted); }
+   .font-mono { font-family: 'SF Mono', 'Fira Code', monospace; }
+   .font-bold { font-weight: 700; }
+   .text-xs { font-size: 0.75rem; }
+   .text-\[11px\] { font-size: 11px; }
+   .text-\[9px\] { font-size: 9px; }
+   .text-\[10px\] { font-size: 10px; }
+   .text-right { text-align: right; }
+   .text-center { text-align: center; }
+   .truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+   .p-2 { padding: 0.5rem; }
+   .mb-1 { margin-bottom: 0.25rem; }
+   .mr-1 { margin-right: 0.25rem; }
+   .mt-4 { margin-top: 1rem; }
+   .border { border: var(--border-width) solid var(--border); }
+   .flex { display: flex; }
+   .justify-between { justify-content: space-between; }
+   .items-center { align-items: center; }
+   .cursor-pointer { cursor: pointer; }
+   .uppercase { text-transform: uppercase; }
+   .tracking-widest { letter-spacing: 0.1em; }
+   .opacity-50 { opacity: 0.5; }
+   .text-muted { color: var(--text-muted); }
+   .hover\:bg-slate-500\/10:hover { background-color: rgba(100, 116, 139, 0.1); }
+   .hover\:text-red-600:hover { color: #dc2626; }
+   .transition-colors { transition: background-color var(--transition); }
+   .transition-all { transition: all var(--transition); }
+   
+   /* --- ACCESSIBILITY & REDUCED MOTION --- */
+   @media (prefers-reduced-motion: reduce) {
+     *, *::before, *::after {
+       animation-duration: 0.01ms !important;
+       animation-iteration-count: 1 !important;
+       transition-duration: 0.01ms !important;
+       scroll-behavior: auto !important;
+     }
+   }
+   
+   *:focus-visible {
+     outline: 2px solid var(--accent);
+     outline-offset: 2px;
+   }
+   
+   /* --- TOAST NOTIFICATIONS (JS Injected) --- */
+   #notification-container {
+     position: fixed;
+     top: 1rem;
+     right: 1rem;
+     z-index: 10000;
+     display: flex;
+     flex-direction: column;
+     gap: 0.5rem;
+     pointer-events: none;
+   }
+   #notification-container > div {
+     background-color: var(--surface);
+     border-left: 3px solid var(--accent);
+     padding: 0.75rem 1rem;
+     border-radius: var(--radius-sm);
+     font-family: 'SF Mono', 'Fira Code', monospace;
+     font-size: 0.75rem;
+     color: var(--text-main);
+     box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+     pointer-events: auto;
+     transform: translateX(120%);
+     transition: transform 0.2s ease;
+   }
+   #notification-container > div.error { border-left-color: var(--error); }
+   #notification-container > div.success { border-left-color: var(--success); }
+
+   /* --- Logo Styling: Argentine Flag inspired, subtle neon (A & M stay WHITE in both modes) --- */
+   .logo-ne,
+   .logo-dq {
+     color: #2dd4bf; /* soft neon cyan/teal */
+     text-shadow: 0 0 2px rgba(45, 212, 191, 0.3);
+     transition: text-shadow var(--transition);
+   }
+   
+   .logo-t {
+     color: #facc15; /* soft gold / yellow */
+     text-shadow: 0 0 2px rgba(250, 204, 21, 0.3);
+   }
+   
+   .logo-a,
+   .logo-m {
+     color: #ffffff; /* always white */
+     /* In light mode, white on near-white background needs subtle dark shadow */
+     text-shadow: 0 0 2px rgba(0, 0, 0, 0.25);
+     transition: text-shadow var(--transition);
+   }
+   
+   /* Dark mode: white letters need no extra shadow (already visible) */
+   .dark .logo-a,
+   .dark .logo-m {
+     text-shadow: none;
+   }
+   
+   /* Keep the existing h1 font styles intact */
+   .bento-title h1 {
+     display: inline-block;
+   }
+   
+   /* Ensure spacing between letters remains natural */
+   .logo-ne, .logo-a, .logo-t, .logo-m, .logo-dq {
+     letter-spacing: normal;
+   }
+   
+   /* Subtle hover effect (premium glow) */
+   .bento-title h1:hover .logo-ne,
+   .bento-title h1:hover .logo-dq {
+     text-shadow: 0 0 6px rgba(45, 212, 191, 0.5);
+   }
+   .bento-title h1:hover .logo-t {
+     text-shadow: 0 0 6px rgba(250, 204, 21, 0.5);
+   }
+   .bento-title h1:hover .logo-a,
+   .bento-title h1:hover .logo-m {
+     text-shadow: 0 0 3px rgba(0, 0, 0, 0.4);
+   }
+   .dark .bento-title h1:hover .logo-a,
+   .dark .bento-title h1:hover .logo-m {
+     text-shadow: 0 0 3px rgba(255, 255, 255, 0.3);
+   }
