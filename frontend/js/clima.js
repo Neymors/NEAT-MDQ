@@ -7,7 +7,7 @@
 // Detecta si estamos en local o en producción
 const BACKEND_URL = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
     ? "http://localhost:3000/api/clima"
-    : "https://tu-backend-desplegado.com/api/clima"; // Cambiar al desplegar
+    : "https://neat-mdq.onrender.com/api/clima"; // Cambiar al desplegar
 
 const AUTO_REFRESH_INTERVAL = 30 * 60 * 1000; // 30 minutos
 let autoRefreshTimer = null;
