@@ -26,7 +26,13 @@ app.use(helmet());
 // --- 2. CONFIGURACIÓN DE CORS (Principio de Menor Privilegio) ---
 // Restringimos estrictamente el acceso a tus orígenes de desarrollo local
 const corsOptions = {
-    origin: ['http://127.0.0.1:5500', 'http://localhost:5500'], 
+    origin: [
+        process.env.FRONTEND_URL,             // URL inyectada desde Render
+        'https://neat-mdq.netlify.app',       // URL directa de producción (por seguridad)
+        'http://127.0.0.1:5500',              // Desarrollo local
+        'http://localhost:5500',              // Desarrollo local
+        'http://localhost:3000'               // Desarrollo local alternativo
+    ].filter(Boolean), // Filtra valores nulos/undefined si la variable de entorno no está lista
     optionsSuccessStatus: 200
 };
 app.use(cors(corsOptions));
